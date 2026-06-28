@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>19428 Glass Weather & Skyline Dashboard</title>
+    <title>19428 Glass Weather Terminal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="background-glow"></div>
     
     <header>
-        <h1>Conshohocken Weather & Skyline</h1>
+        <h1>Conshohocken Weather Command</h1>
         <p class="subtitle">Zip Code 19428 • Automated Glass Dashboard</p>
     </header>
 
@@ -39,10 +39,10 @@
                 </section>
             </div>
 
-            <!-- Right Column: Radar & Live Skyline Cam -->
+            <!-- Right Column: Dual-Radar Array -->
             <div class="right-column">
                 <section id="radar-section" class="glass-card">
-                    <h2>Live Radar (Windy.com)</h2>
+                    <h2>Regional Weather Radar (Windy)</h2>
                     <div class="iframe-container">
                         <iframe 
                             src="https://embed.windy.com/embed2.html?lat=40.078&lon=-75.301&detailLat=40.078&detailLon=-75.301&width=100%&height=350&zoom=9&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" 
@@ -51,14 +51,13 @@
                     </div>
                 </section>
 
-                <section id="cam-section" class="glass-card">
-                    <h2>Philadelphia Live Skyline Cam (EarthCam Feed)</h2>
+                <section id="nws-radar-section" class="glass-card">
+                    <h2>NWS Mount Holly Live Radar Loop (KDIX)</h2>
                     <div class="iframe-container">
-                        <!-- Embedded Live Feed of EarthCam Philadelphia via YouTube Stream -->
+                        <!-- Native NWS interactive radar standard view tailored for the Mount Holly station -->
                         <iframe 
-                            src="https://www.youtube.com/embed/live_stream?channel=UC6qrG3W8SMK0jior2olka3g&autoplay=1&mute=1" 
+                            src="https://radar.weather.gov/station/kdix/standard" 
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                         </iframe>
                     </div>
@@ -69,7 +68,7 @@
     </main>
 
     <footer>
-        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA</a> • <a href="https://www.windy.com/" target="_blank">Windy</a> • Live Cam via <a href="https://www.earthcam.com" target="_blank">EarthCam</a></p>
+        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA / NWS Mount Holly</a> • <a href="https://www.windy.com/" target="_blank">Windy Map Matrix</a></p>
     </footer>
 
     <script src="script.js"></script>
