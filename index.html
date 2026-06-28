@@ -65,11 +65,13 @@
 
             <!-- Right Column: Tracking Visuals (Radar, Lightning) -->
             <div class="right-column">
-                <section id="radar-section" class="glass-card">
-                    <h2>Regional Weather Radar (Windy)</h2>
-                    <div class="iframe-container">
+            <!-- Localized Lightning Tracker Map -->
+                <section id="lightning-section" class="glass-card">
+                    <h2>Live Regional Lightning Map (Blitzortung)</h2>
+                    <div class="iframe-container standard-map">
+                        <!-- Centered on Conshohocken with custom zoom parameters for a local footprint -->
                         <iframe 
-                            src="https://embed.windy.com/embed2.html?lat=40.078&lon=-75.301&detailLat=40.078&detailLon=-75.301&width=100%&height=350&zoom=9&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" 
+                            src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ZoomControl=1&DisplayLabels=1&lat=40.078&lon=-75.301&zoom=10" 
                             frameborder="0">
                         </iframe>
                     </div>
