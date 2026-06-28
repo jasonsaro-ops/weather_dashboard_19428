@@ -29,7 +29,7 @@ body {
     position: relative;
 }
 
-/* Ambient neon glow behind the glass */
+/* Ambient neon background glow */
 .background-glow {
     position: absolute;
     width: 600px;
@@ -67,7 +67,7 @@ header h1 {
     margin: 0 auto;
 }
 
-/* The Glass Card Effect */
+/* Frosted Glass Card Architecture */
 .glass-card {
     background: var(--glass-bg);
     background-image: linear-gradient(135deg, var(--glass-highlight), transparent);
@@ -91,7 +91,7 @@ header h1 {
     color: var(--accent-blue);
 }
 
-/* Severe Alert Styling */
+/* Severe Alert Container */
 .alert-card {
     background: var(--glass-alert-bg);
     border: 1px solid var(--glass-alert-border);
@@ -109,7 +109,7 @@ header h1 {
 
 .hidden { display: none !important; }
 
-/* Responsive Dashboard Layout */
+/* Grid Blueprint */
 .grid-layout {
     display: flex;
     flex-direction: column;
@@ -122,7 +122,7 @@ header h1 {
     .right-column { flex: 1; }
 }
 
-/* Viewports for Radar & Traffic */
+/* Viewport Containers for Web Components */
 .iframe-container {
     width: 100%;
     height: 380px;
@@ -138,7 +138,7 @@ header h1 {
     background: #12131a;
 }
 
-/* Forecast Grid layout */
+/* Forecast Aggregation Grid */
 .forecast-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
