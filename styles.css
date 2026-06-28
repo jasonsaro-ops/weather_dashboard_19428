@@ -125,10 +125,15 @@ header h1 {
 /* Viewport Containers for Web Components */
 .iframe-container {
     width: 100%;
-    height: 380px;
+    height: 380px; /* Kept for the standard Windy map configuration */
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* New custom height override targeted exclusively for the NWS frame */
+#nws-radar-section .iframe-container {
+    height: 700px; /* Expanded vertical space to eliminate iframe scrollbars */
 }
 
 .iframe-container iframe {
