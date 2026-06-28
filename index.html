@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>19428 Glass Weather Terminal</title>
+    <title>19428 Glass Weather & Hydro Terminal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="background-glow"></div>
     
-   <header>
+    <header>
         <h1>Conshohocken Weather Command</h1>
-        <!-- The subtitle line has been removed -->
     </header>
 
     <main class="dashboard-container">
@@ -24,11 +23,36 @@
         <!-- Main Dashboard Grid -->
         <div class="grid-layout">
             
-            <!-- Left Column: Weather Info -->
+            <!-- Left Column: Weather Reports & Hydro Metrics -->
             <div class="left-column">
                 <section id="current-weather" class="glass-card">
                     <h2>Current Overview</h2>
                     <div id="current-content">Loading current conditions...</div>
+                </section>
+
+                <!-- NEW: USGS Schuylkill River Real-Time Hydro Widgets -->
+                <section id="hydro-section" class="glass-card">
+                    <h2>USGS Schuylkill River Gauge (Conshohocken)</h2>
+                    <div class="river-widget-container">
+                        <div class="river-cam-box">
+                            <!-- Direct official embed of the USGS HIVIS Station Camera -->
+                            <iframe 
+                                src="https://apps.usgs.gov/hivis/camera/PA_Schuylkill_River_at_Conshohocken" 
+                                frameborder="0"
+                                scrolling="no">
+                            </iframe>
+                        </div>
+                        <div class="river-data-box">
+                            <div class="metric-card">
+                                <div class="metric-label">🌊 River Stage (Height)</div>
+                                <div id="river-height" class="metric-value">Loading...</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">💨 Water Flow (Discharge)</div>
+                                <div id="river-flow" class="metric-value">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <section id="forecast-section" class="glass-card">
@@ -39,7 +63,7 @@
                 </section>
             </div>
 
-            <!-- Right Column: Dual-Radar Array -->
+            <!-- Right Column: Tracking Visuals (Radar, Lightning) -->
             <div class="right-column">
                 <section id="radar-section" class="glass-card">
                     <h2>Regional Weather Radar (Windy)</h2>
@@ -51,10 +75,20 @@
                     </div>
                 </section>
 
+                <!-- NEW: Live Dynamic Lightning Tracker Map -->
+                <section id="lightning-section" class="glass-card">
+                    <h2>Live Regional Lightning Map (Blitzortung)</h2>
+                    <div class="iframe-container standard-map">
+                        <iframe 
+                            src="https://www.blitzortung.org/en/live_lightning_maps.php?north=41.5&west=-76.5&east=-74.0&south=39.0&partner=0" 
+                            frameborder="0">
+                        </iframe>
+                    </div>
+                </section>
+
                 <section id="nws-radar-section" class="glass-card">
                     <h2>NWS Mount Holly Live Radar Loop (KDIX)</h2>
-                    <div class="iframe-container">
-                        <!-- Native NWS interactive radar standard view tailored for the Mount Holly station -->
+                    <div class="iframe-container tall-map">
                         <iframe 
                             src="https://radar.weather.gov/station/kdix/standard" 
                             frameborder="0"
@@ -68,7 +102,7 @@
     </main>
 
     <footer>
-        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA / NWS Mount Holly</a> • <a href="https://www.windy.com/" target="_blank">Windy Map Matrix</a></p>
+        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA / NWS</a> • <a href="https://waterdata.usgs.gov/" target="_blank">USGS Hydro Informatics</a> • <a href="https://www.windy.com/" target="_blank">Windy Map Matrix</a></p>
     </footer>
 
     <script src="script.js"></script>
