@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>19428 Glass Weather & Traffic Dashboard</title>
+    <title>19428 Glass Weather & Skyline Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="background-glow"></div>
     
     <header>
-        <h1>Conshohocken Weather & Traffic</h1>
+        <h1>Conshohocken Weather & Skyline</h1>
         <p class="subtitle">Zip Code 19428 • Automated Glass Dashboard</p>
     </header>
 
@@ -39,7 +39,7 @@
                 </section>
             </div>
 
-            <!-- Right Column: Radar & 511PA Live Feeds -->
+            <!-- Right Column: Radar & Live Skyline Cam -->
             <div class="right-column">
                 <section id="radar-section" class="glass-card">
                     <h2>Live Radar (Windy.com)</h2>
@@ -51,14 +51,15 @@
                     </div>
                 </section>
 
-                <section id="traffic-section" class="glass-card">
-                    <h2>511PA Live Conshohocken Traffic (I-76 / I-476)</h2>
+                <section id="cam-section" class="glass-card">
+                    <h2>Philadelphia Live Skyline Cam (EarthCam Feed)</h2>
                     <div class="iframe-container">
-                        <!-- Embedded 511PA interactive map directly centered on the Conshohocken I-76/I-476 interchange area -->
+                        <!-- Embedded Live Feed of EarthCam Philadelphia via YouTube Stream -->
                         <iframe 
-                            src="https://www.511pa.com/map?lat=40.065&lon=-75.302&zoom=14" 
+                            src="https://www.youtube.com/embed/live_stream?channel=UC6qrG3W8SMK0jior2olka3g&autoplay=1&mute=1" 
                             frameborder="0"
-                            allow="geolocation">
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
                         </iframe>
                     </div>
                 </section>
@@ -68,7 +69,7 @@
     </main>
 
     <footer>
-        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA</a> • <a href="https://www.windy.com/" target="_blank">Windy</a> • <a href="https://www.511pa.com/" target="_blank">511PA PennDOT</a></p>
+        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA</a> • <a href="https://www.windy.com/" target="_blank">Windy</a> • Live Cam via <a href="https://www.earthcam.com" target="_blank">EarthCam</a></p>
     </footer>
 
     <script src="script.js"></script>
