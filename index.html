@@ -1,107 +1,76 @@
-const LAT = 40.078;
-const LON = -75.301;
-
-async function initDashboard() {
-    try {
-        await fetchAlerts();
-        await fetchForecast();
-    } catch (error) {
-        console.error("Error initializing weather dashboard:", error);
-    }
-}
-
-async function fetchAlerts() {
-    const alertsUrl = `https://api.weather.gov/alerts/active?point=${LAT},${LON}`;
-    const alertsSection = document.getElementById('alerts-section');
-    const alertsContent = document.getElementById('alerts-content');
-
-    try {
-        const response = await fetch(alertsUrl, { headers: { 'User-Agent': 'GitHubWeatherDashboard/1.0' } });
-        if (!response.ok) throw new Error("Failed to fetch alerts");
-        
-        const data = await response.json();
-        const features = data.features || [];
-
-        if (features.length === 0) {
-            alertsSection.classList.add('hidden');
-            return;
-        }
-
-        alertsSection.classList.remove('hidden');
-        alertsContent.innerHTML = '';
-
-        features.forEach(alert => {
-            const props = alert.properties;
-            const alertElement = document.createElement('div');
-            alertElement.className = 'alert-item';
-            alertElement.innerHTML = `
-                <strong>${props.event}</strong><br>
-                <small>Severity: ${props.severity} | Headline: ${props.headline}</small><br>
-                <p style="margin-top: 5px; font-size: 0.85rem; color: #fca5a5;">${props.description}</p>
-            `;
-            alertsContent.appendChild(alertElement);
-        });
-    } catch (e) {
-        console.error(e);
-        alertsContent.innerHTML = "Unable to fetch severe weather alerts at this time.";
-    }
-}
-
-async function fetchForecast() {
-    const pointsUrl = `https://api.weather.gov/points/${LAT},${LON}`;
-    const currentContent = document.getElementById('current-content');
-    const forecastGrid = document.getElementById('forecast-grid');
-
-    try {
-        const pointsResponse = await fetch(pointsUrl, { headers: { 'User-Agent': 'GitHubWeatherDashboard/1.0' } });
-        if (!pointsResponse.ok) throw new Error("Failed to fetch metadata points");
-        
-        const pointsData = await pointsResponse.json();
-        const forecastUrl = pointsData.properties.forecast;
-
-        const forecastResponse = await fetch(forecastUrl, { headers: { 'User-Agent': 'GitHubWeatherDashboard/1.0' } });
-        if (!forecastResponse.ok) throw new Error("Failed to fetch forecast grid");
-
-        const forecastData = await forecastResponse.json();
-        const periods = forecastData.properties.periods;
-
-        if (!periods || periods.length === 0) {
-            currentContent.innerHTML = "No forecast data returned.";
-            return;
-        }
-
-        const current = periods[0];
-        currentContent.innerHTML = `
-            <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 5px;">${current.temperature}°${current.temperatureUnit}</div>
-            <div style="color: var(--accent); font-weight: 600;">${current.name}: ${current.shortForecast}</div>
-            <p style="margin-top: 10px; font-size: 0.95rem; color: var(--text-muted);">${current.detailedForecast}</p>
-            <p style="margin-top: 5px; font-size: 0.85rem;">💨 Wind: ${current.windSpeed} ${current.windDirection}</p>
-        `;
-
-        forecastGrid.innerHTML = '';
-        periods.slice(1, 14).forEach(period => {
-            const card = document.createElement('div');
-            card.className = 'forecast-card';
-            card.innerHTML = `
-                <div class="day">${period.name}</div>
-                <img src="${period.icon}" alt="${period.shortForecast}" style="width: 40px; height: 40px; margin: 5px 0; border-radius: 50%;">
-                <div class="temp">${period.temperature}°${period.temperatureUnit}</div>
-                <div class="short-forecast">${period.shortForecast}</div>
-            `;
-            forecastGrid.appendChild(card);
-        });
-
-    } catch (e) {
-        console.error(e);
-        currentContent.innerHTML = "Error loading weather forecast from NOAA.";
-        forecastGrid.innerHTML = "";
-    }
-}
-
-// Run dashboard setup on load
-document.addEventListener('DOMContentLoaded', () => {
-    initDashboard();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19428 Glass Weather & Traffic Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-glow"></div>
     
-    // Auto-refresh data every 2 minutes (120,000 milliseconds)
-    setInterval(initDashboard, 120000);
-});
+    <header>
+        <h1>Conshohocken Weather & Traffic</h1>
+        <p class="subtitle">Zip Code 19428 • Automated Glass Dashboard</p>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- Severe Weather Alerts Section -->
+        <section id="alerts-section" class="glass-card alert-card hidden">
+            <h2>⚠️ Active Severe Weather Alerts</h2>
+            <div id="alerts-content">Loading live alerts...</div>
+        </section>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid-layout">
+            
+            <!-- Left Column: Weather Info -->
+            <div class="left-column">
+                <section id="current-weather" class="glass-card">
+                    <h2>Current Overview</h2>
+                    <div id="current-content">Loading current conditions...</div>
+                </section>
+
+                <section id="forecast-section" class="glass-card">
+                    <h2>7-Day Outlook (NOAA)</h2>
+                    <div id="forecast-grid" class="forecast-grid">
+                        Loading 7-day forecast...
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Radar & 511PA Live Feeds -->
+            <div class="right-column">
+                <section id="radar-section" class="glass-card">
+                    <h2>Live Radar (Windy.com)</h2>
+                    <div class="iframe-container">
+                        <iframe 
+                            src="https://embed.windy.com/embed2.html?lat=40.078&lon=-75.301&detailLat=40.078&detailLon=-75.301&width=100%&height=350&zoom=9&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" 
+                            frameborder="0">
+                        </iframe>
+                    </div>
+                </section>
+
+                <section id="traffic-section" class="glass-card">
+                    <h2>511PA Live Conshohocken Traffic (I-76 / I-476)</h2>
+                    <div class="iframe-container">
+                        <!-- Embedded 511PA interactive map directly centered on the Conshohocken I-76/I-476 interchange area -->
+                        <iframe 
+                            src="https://www.511pa.com/map?lat=40.065&lon=-75.302&zoom=14" 
+                            frameborder="0"
+                            allow="geolocation">
+                        </iframe>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>Data streams: <a href="https://www.weather.gov/" target="_blank">NOAA</a> • <a href="https://www.windy.com/" target="_blank">Windy</a> • <a href="https://www.511pa.com/" target="_blank">511PA PennDOT</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
