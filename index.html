@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19428 Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Weather Dashboard - Zip Code 19428</h1>
+        <p>Real-time conditions, 7-Day Outlook, Radar, and Severe Weather Alerts</p>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- Severe Weather Alerts Section -->
+        <section id="alerts-section" class="card hidden">
+            <h2>⚠️ Active Severe Weather Alerts</h2>
+            <div id="alerts-content">Loading alerts...</div>
+        </section>
+
+        <!-- Current & Outlook Layout -->
+        <div class="grid-layout">
+            <!-- Left Side: Forecast & Details -->
+            <div class="left-column">
+                <section id="current-weather" class="card">
+                    <h2>Current Overview</h2>
+                    <div id="current-content">Loading current conditions...</div>
+                </section>
+
+                <section id="forecast-section" class="card">
+                    <h2>7-Day Outlook (NOAA)</h2>
+                    <div id="forecast-grid" class="forecast-grid">
+                        <!-- Forecast cards injected here -->
+                        Loading 7-day forecast...
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Side: Interactive Radar -->
+            <div class="right-column">
+                <section id="radar-section" class="card">
+                    <h2>Live Radar (Windy.com)</h2>
+                    <div class="iframe-container">
+                        <iframe 
+                            src="https://embed.windy.com/embed2.html?lat=40.078&lon=-75.301&detailLat=40.078&detailLon=-75.301&width=100%&height=450&zoom=8&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" 
+                            frameborder="0">
+                        </iframe>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Data provided by <a href="https://www.weather.gov/" target="_blank">NOAA</a> and <a href="https://www.windy.com/" target="_blank">Windy.com</a>. Tailored for GitHub Pages.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

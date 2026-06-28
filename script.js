@@ -1,0 +1,108 @@
+// Lat/Lon for Zip Code 19428 (Conshohocken area)
+const LAT = 40.078;
+const LON = -75.301;
+
+async function initDashboard() {
+    try {
+        await fetchAlerts();
+        await fetchForecast();
+    } catch (error) {
+        console.error("Error initializing weather dashboard:", error);
+    }
+}
+
+async function fetchAlerts() {
+    const alertsUrl = `https://api.weather.gov/alerts/active?point=${LAT},${LON}`;
+    const alertsSection = document.getElementById('alerts-section');
+    const alertsContent = document.getElementById('alerts-content');
+
+    try {
+        const response = await fetch(alertsUrl, { headers: { 'User-Agent': 'GitHubWeatherDashboard/1.0' } });
+        if (!response.ok) throw new Error("Failed to fetch alerts");
+        
+        const data = await response.json();
+        const features = data.features || [];
+
+        if (features.length === 0) {
+            alertsSection.classList.add('hidden');
+            return;
+        }
+
+        alertsSection.classList.remove('hidden');
+        alertsContent.innerHTML = '';
+
+        features.forEach(alert => {
+            const props = alert.properties;
+            const alertElement = document.createElement('div');
+            alertElement.className = 'alert-item';
+            alertElement.innerHTML = `
+                <strong>${props.event}</strong><br>
+                <small>Severity: ${props.severity} | Headline: ${props.headline}</small><br>
+                <p style="margin-top: 5px; font-size: 0.85rem; color: #fca5a5;">${props.description}</p>
+            `;
+            alertsContent.appendChild(alertElement);
+        });
+    } catch (e) {
+        console.error(e);
+        alertsContent.innerHTML = "Unable to fetch severe weather alerts at this time.";
+    }
+}
+
+async function fetchForecast() {
+    // Step 1: Get the metadata points from NOAA for our coordinates
+    const pointsUrl = `https://api.weather.gov/points/${LAT},${LON}`;
+    const currentContent = document.getElementById('current-content');
+    const forecastGrid = document.getElementById('forecast-grid');
+
+    try {
+        const pointsResponse = await fetch(pointsUrl, { headers: { 'User-Agent': 'GitHubWeatherDashboard/1.0' } });
+        if (!pointsResponse.ok) throw new Error("Failed to fetch metadata points");
+        
+        const pointsData = await pointsResponse.json();
+        const forecastUrl = pointsData.properties.forecast;
+
+        // Step 2: Fetch the actual grid forecast data
+        const forecastResponse = await fetch(forecastUrl, { headers: { 'User-Agent': 'GitHubWeatherDashboard/1.0' } });
+        if (!forecastResponse.ok) throw new Error("Failed to fetch forecast grid");
+
+        const forecastData = await forecastResponse.json();
+        const periods = forecastData.properties.periods;
+
+        if (!periods || periods.length === 0) {
+            currentContent.innerHTML = "No forecast data returned.";
+            return;
+        }
+
+        // Current Overview (First item)
+        const current = periods[0];
+        currentContent.innerHTML = `
+            <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 5px;">${current.temperature}°${current.temperatureUnit}</div>
+            <div style="color: var(--accent); font-weight: 600;">${current.name}: ${current.shortForecast}</div>
+            <p style="margin-top: 10px; font-size: 0.95rem; color: var(--text-muted);">${current.detailedForecast}</p>
+            <p style="margin-top: 5px; font-size: 0.85rem;">💨 Wind: ${current.windSpeed} ${current.windDirection}</p>
+        `;
+
+        // 7-Day / Multi-day grid (skip the 1st or display daytime periods)
+        forecastGrid.innerHTML = '';
+        periods.slice(1, 14).forEach(period => {
+            // Only show daytime or specific descriptive chunks to keep the dashboard concise
+            const card = document.createElement('div');
+            card.className = 'forecast-card';
+            card.innerHTML = `
+                <div class="day">${period.name}</div>
+                <img src="${period.icon}" alt="${period.shortForecast}" style="width: 40px; height: 40px; margin: 5px 0; border-radius: 50%;">
+                <div class="temp">${period.temperature}°${period.temperatureUnit}</div>
+                <div class="short-forecast">${period.shortForecast}</div>
+            `;
+            forecastGrid.appendChild(card);
+        });
+
+    } catch (e) {
+        console.error(e);
+        currentContent.innerHTML = "Error loading weather forecast from NOAA.";
+        forecastGrid.innerHTML = "";
+    }
+}
+
+// Run dashboard setup on load
+document.addEventListener('DOMContentLoaded', initDashboard);
