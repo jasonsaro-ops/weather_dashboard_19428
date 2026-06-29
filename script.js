@@ -1,15 +1,16 @@
 const LAT = 40.078;
 const LON = -75.301;
-// Conshohocken USGS station reporting key identifier
-const USGS_STATION_ID = "01473730"; 
+
+// Collection array of our upstream, target local, and downstream monitoring stations
+const HYDRO_STATIONS = ["01473500", "01473730", "01473800"];
 
 async function initDashboard() {
     try {
         await fetchAlerts();
         await fetchForecast();
-        await fetchHydroMetrics();
+        await fetchHydroNetwork();
     } catch (error) {
-        console.error("Dashboard lifecyle exception handled:", error);
+        console.error("Dashboard lifecycle network sync issue:", error);
     }
 }
 
@@ -19,8 +20,8 @@ async function fetchAlerts() {
     const alertsContent = document.getElementById('alerts-content');
 
     try {
-        const response = await fetch(alertsUrl, { headers: { 'User-Agent': 'PhillyWeatherDashboard/3.0' } });
-        if (!response.ok) throw new Error("Alert processing down");
+        const response = await fetch(alertsUrl, { headers: { 'User-Agent': 'PhillyWeatherDashboard/4.0' } });
+        if (!response.ok) throw new Error("Alert collection issue");
         const data = await response.json();
         const features = data.features || [];
 
@@ -53,9 +54,9 @@ async function fetchForecast() {
     const forecastGrid = document.getElementById('forecast-grid');
 
     try {
-        const pointsResponse = await fetch(pointsUrl, { headers: { 'User-Agent': 'PhillyWeatherDashboard/3.0' } });
+        const pointsResponse = await fetch(pointsUrl, { headers: { 'User-Agent': 'PhillyWeatherDashboard/4.0' } });
         const pointsData = await pointsResponse.json();
-        const forecastResponse = await fetch(pointsData.properties.forecast, { headers: { 'User-Agent': 'PhillyWeatherDashboard/3.0' } });
+        const forecastResponse = await fetch(pointsData.properties.forecast, { headers: { 'User-Agent': 'PhillyWeatherDashboard/4.0' } });
         const forecastData = await forecastResponse.json();
         const periods = forecastData.properties.periods;
 
@@ -71,7 +72,7 @@ async function fetchForecast() {
                 </div>
             </div>
             <p style="margin-top: 15px; color: var(--text-muted);">${current.detailedForecast}</p>
-        `;
+        ```;
 
         forecastGrid.innerHTML = '';
         periods.slice(1, 13).forEach(period => {
@@ -90,39 +91,57 @@ async function fetchForecast() {
     }
 }
 
-// NEW: API Fetch configuration for parsing instant stream heights & speed volumes
-async function fetchHydroMetrics() {
-    const usgsUrl = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${USGS_STATION_ID}&parameterCd=00060,00065&siteStatus=all`;
-    const heightDisplay = document.getElementById('river-height');
-    const flowDisplay = document.getElementById('river-flow');
+// Multi-Station Data Processing Engine
+async function fetchHydroNetwork() {
+    const stationQueryString = HYDRO_STATIONS.join(",");
+    const usgsUrl = `[https://waterservices.usgs.gov/nwis/iv/?format=json&sites=$](https://waterservices.usgs.gov/nwis/iv/?format=json&sites=$){stationQueryString}&parameterCd=00060,00065&siteStatus=all`;
 
     try {
         const response = await fetch(usgsUrl);
-        if (!response.ok) throw new Error("USGS stream offline");
+        if (!response.ok) throw new Error("USGS Stream services error");
         const data = await response.json();
         
         const timeSeries = data.value.timeSeries || [];
         
-        timeSeries.forEach(series => {
-            const paramCode = series.variable.variableCode[0].value;
-            const latestValue = series.values[0].value[0].value;
+        // Reset placeholders default markers
+        const nodeMap = {
+            "01473500": { height: "norristown-height", flow: "norristown-flow", hasFlow: false },
+            "01473730": { height: "conshohocken-height", flow: "conshohocken-flow", hasFlow: false },
+            "01473800": { height: "manayunk-height", flow: "manayunk-flow", hasFlow: false }
+        };
 
-            if (paramCode === "00065") {
-                // 00065 maps to Gage Height (ft)
-                heightDisplay.innerText = `${parseFloat(latestValue).toFixed(2)} ft`;
-            } else if (paramCode === "00060") {
-                // 00060 maps to Stream Discharge (cfs)
-                flowDisplay.innerText = `${parseInt(latestValue).toLocaleString()} cfs`;
+        timeSeries.forEach(series => {
+            const siteCode = series.sourceInfo.siteCode[0].value;
+            const paramCode = series.variable.variableCode[0].value;
+            const targetNodes = nodeMap[siteCode];
+
+            if (targetNodes && series.values[0] && series.values[0].value[0]) {
+                const latestValue = series.values[0].value[0].value;
+
+                if (paramCode === "00065") { // Stage Value
+                    document.getElementById(targetNodes.height).innerText = `${parseFloat(latestValue).toFixed(2)} ft`;
+                } else if (paramCode === "00060") { // Discharge Value
+                    document.getElementById(targetNodes.flow).innerText = `${parseInt(latestValue).toLocaleString()} cfs`;
+                    targetNodes.hasFlow = true;
+                }
             }
         });
+
+        // Loop checks to apply static clean label handling if station doesn't track stream discharge volume
+        Object.keys(nodeMap).forEach(key => {
+            if (!nodeMap[key].hasFlow) {
+                document.getElementById(nodeMap[key].flow).innerText = "N/A";
+                document.getElementById(nodeMap[key].flow).style.fontSize = "0.95rem";
+                document.getElementById(nodeMap[key].flow).style.color = "var(--text-muted)";
+            }
+        });
+
     } catch (e) {
         console.error("Hydro data update failed:", e);
-        heightDisplay.innerText = "Unavailable";
-        flowDisplay.innerText = "Unavailable";
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     initDashboard();
-    setInterval(initDashboard, 120000); // System cycle updates every 2 minutes
+    setInterval(initDashboard, 120000); // 2-minute auto-refresh cycle
 });
