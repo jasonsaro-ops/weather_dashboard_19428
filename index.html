@@ -30,18 +30,47 @@
                     <div id="current-content">Loading current conditions...</div>
                 </section>
 
-                <!-- Cleaned USGS Schuylkill River Tracking Matrix -->
+                <!-- Expanded USGS Schuylkill River Multi-Station Monitor -->
                 <section id="hydro-section" class="glass-card">
-                    <h2>USGS Schuylkill River Gauge (Conshohocken)</h2>
-                    <div class="river-data-box horizontal">
-                        <div class="metric-card">
-                            <div class="metric-label">🌊 River Stage (Height)</div>
-                            <div id="river-height" class="metric-value">Loading...</div>
+                    <h2>USGS Schuylkill River Telemetry Network</h2>
+                    <div class="hydro-network-grid">
+                        
+                        <!-- Station 1: Norristown (Upstream) -->
+                        <div class="station-row">
+                            <div class="station-meta">
+                                <span class="station-name">Norristown (Upstream)</span>
+                                <span class="station-id">USGS 01473500</span>
+                            </div>
+                            <div class="station-metrics">
+                                <div class="mini-metric"><small>Stage</small><b id="norristown-height">--</b></div>
+                                <div class="mini-metric"><small>Flow</small><b id="norristown-flow">--</b></div>
+                            </div>
                         </div>
-                        <div class="metric-card">
-                            <div class="metric-label">💨 Water Flow (Discharge)</div>
-                            <div id="river-flow" class="metric-value">Loading...</div>
+
+                        <!-- Station 2: Conshohocken (Local) -->
+                        <div class="station-row local-station">
+                            <div class="station-meta">
+                                <span class="station-name">Conshohocken (Local)</span>
+                                <span class="station-id">USGS 01473730</span>
+                            </div>
+                            <div class="station-metrics">
+                                <div class="mini-metric"><small>Stage</small><b id="conshohocken-height">--</b></div>
+                                <div class="mini-metric"><small>Flow</small><b id="conshohocken-flow">--</b></div>
+                            </div>
                         </div>
+
+                        <!-- Station 3: Manayunk (Downstream) -->
+                        <div class="station-row">
+                            <div class="station-meta">
+                                <span class="station-name">Manayunk (Downstream)</span>
+                                <span class="station-id">USGS 01473800</span>
+                            </div>
+                            <div class="station-metrics">
+                                <div class="mini-metric"><small>Stage</small><b id="manayunk-height">--</b></div>
+                                <div class="mini-metric"><small>Flow</small><b id="manayunk-flow">--</b></div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
