@@ -30,27 +30,17 @@
                     <div id="current-content">Loading current conditions...</div>
                 </section>
 
-                <!-- NEW: USGS Schuylkill River Real-Time Hydro Widgets -->
+                <!-- Cleaned USGS Schuylkill River Tracking Matrix -->
                 <section id="hydro-section" class="glass-card">
                     <h2>USGS Schuylkill River Gauge (Conshohocken)</h2>
-                    <div class="river-widget-container">
-                        <div class="river-cam-box">
-                            <!-- Direct official embed of the USGS HIVIS Station Camera -->
-                            <iframe 
-                                src="https://apps.usgs.gov/hivis/camera/PA_Schuylkill_River_at_Conshohocken" 
-                                frameborder="0"
-                                scrolling="no">
-                            </iframe>
+                    <div class="river-data-box horizontal">
+                        <div class="metric-card">
+                            <div class="metric-label">🌊 River Stage (Height)</div>
+                            <div id="river-height" class="metric-value">Loading...</div>
                         </div>
-                        <div class="river-data-box">
-                            <div class="metric-card">
-                                <div class="metric-label">🌊 River Stage (Height)</div>
-                                <div id="river-height" class="metric-value">Loading...</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-label">💨 Water Flow (Discharge)</div>
-                                <div id="river-flow" class="metric-value">Loading...</div>
-                            </div>
+                        <div class="metric-card">
+                            <div class="metric-label">💨 Water Flow (Discharge)</div>
+                            <div id="river-flow" class="metric-value">Loading...</div>
                         </div>
                     </div>
                 </section>
@@ -63,26 +53,14 @@
                 </section>
             </div>
 
-            <!-- Right Column: Tracking Visuals (Radar, Lightning) -->
+            <!-- Right Column: Tracking Visuals -->
             <div class="right-column">
-            <!-- Localized Lightning Tracker Map -->
-                <section id="lightning-section" class="glass-card">
-                    <h2>Live Regional Lightning Map (Blitzortung)</h2>
-                    <div class="iframe-container standard-map">
-                        <!-- Centered on Conshohocken with custom zoom parameters for a local footprint -->
+                <!-- Windy Integrated Radar & Lightning Feed -->
+                <section id="radar-section" class="glass-card">
+                    <h2>Live Radar & Lightning (Windy)</h2>
+                    <div class="iframe-container">
                         <iframe 
-                            src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ZoomControl=1&DisplayLabels=1&lat=40.078&lon=-75.301&zoom=10" 
-                            frameborder="0">
-                        </iframe>
-                    </div>
-                </section>
-
-                <!-- NEW: Live Dynamic Lightning Tracker Map -->
-                <section id="lightning-section" class="glass-card">
-                    <h2>Live Regional Lightning Map (Blitzortung)</h2>
-                    <div class="iframe-container standard-map">
-                        <iframe 
-                            src="https://www.blitzortung.org/en/live_lightning_maps.php?north=41.5&west=-76.5&east=-74.0&south=39.0&partner=0" 
+                            src="https://embed.windy.com/embed2.html?lat=40.078&lon=-75.301&detailLat=40.078&detailLon=-75.301&width=100%&height=350&zoom=10&level=surface&overlay=radar&product=radar&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" 
                             frameborder="0">
                         </iframe>
                     </div>
